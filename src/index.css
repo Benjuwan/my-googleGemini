@@ -20,18 +20,6 @@ body {
   font-family: "Helvetica Neue", "Arial", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", sans-serif;
   background-color: #efefef;
   overflow-x: hidden;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, .65) 0%, rgba(255, 255, 255, .65) 100%), url(../src/assets/cutes-bgimg-min.png)repeat center top/cover;
-  animation: backgroundImgMove linear infinite 99s alternate-reverse;
-}
-
-@keyframes backgroundImgMove {
-  0% {
-    background-position: -999px 999px;
-  }
-
-  100% {
-    background-position: 0px 0px;
-  }
 }
 
 @media screen and (min-width: 700px) {
