@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { css } from "@emotion/css";
 import ReactMarkdown from "react-markdown";
 import { LoadingEl } from "./LoadingEl";
+import { ImgFileUpload } from "./ImgFileUpload";
 
 type ChatMessage = {
   role: string;
@@ -69,6 +70,7 @@ const buttonStyle = css`
 const inputAreaStyle = css`
   display: flex;
   justify-content: space-between;
+  flex-flow: row wrap;
   padding: 10px;
   background-color: #fafafa;
   position: fixed;
@@ -80,8 +82,8 @@ const inputAreaStyle = css`
 
 const formStyle = css`
   display: flex;
-  gap: 2%;
   flex-flow: row wrap;
+  gap: 2%;
   width: clamp(320px, calc(100vw/2), 560px);
 `
 
@@ -94,6 +96,9 @@ export const Chat = () => {
 
   /* LoadingEl 用 */
   const [loading, setLoading] = useState<boolean>(false);
+
+  /* 画像 */
+  const [base64Images, setBase64Images] = useState<string>('');
 
   const sendMessage = async () => {
     const userMessage: ChatMessage =
@@ -181,9 +186,13 @@ export const Chat = () => {
   const renderChatMessage = (message: ChatMessage) => {
     if (message.role === "system") {
       // マークダウン形式のメッセージをHTMLに変換して表示
-      return <ReactMarkdown>{message.content}</ReactMarkdown>;
+      if (message.content === 'string') {
+        return <ReactMarkdown>{message.content}</ReactMarkdown>;
+      }
     }
-    return <div>{message.content}</div>; // 通常のテキストメッセージ
+    if (message.content === 'string') {
+      return <div>{message.content}</div>; // 通常のテキストメッセージ
+    }
   };
 
   return (
@@ -220,6 +229,7 @@ export const Chat = () => {
             Send
           </button>
         </form>
+        <ImgFileUpload base64Images={base64Images} setBase64Images={setBase64Images} />
       </div>
     </div>
   );
