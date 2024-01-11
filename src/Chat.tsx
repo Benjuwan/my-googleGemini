@@ -86,12 +86,22 @@ const formStyle = css`
 `
 
 export const Chat = () => {
+  /* user の入力 */
   const [input, setInput] = useState<string>("");
+
+  /* user と system(gemini)の会話内容のオブジェクト・配列 State */
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+
+  /* LoadingEl 用 */
   const [loading, setLoading] = useState<boolean>(false);
 
   const sendMessage = async () => {
-    const userMessage: ChatMessage = { role: "user", content: input };
+    const userMessage: ChatMessage =
+    {
+      role: "user",
+      content: input // user が入力した内容をセット
+    };
+
     // 画面上の会話履歴を更新
     const updatedChatHistory = [...chatHistory, userMessage];
 
@@ -106,11 +116,13 @@ export const Chat = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          // リクエストボディ：リソースの更新や作成に使用、今回 method が POST なので create している。つまり system（gemini）が入力した内容を JSONデータとして設定している
           body: JSON.stringify({
             contents: [{ parts: [{ text: input }] }],
           }),
         }
       );
+      // console.log(response);
 
       if (!response.ok) {
         // エラーハンドリング
@@ -130,6 +142,7 @@ export const Chat = () => {
           botResponse.candidates.length > 0
         ) {
           const firstCandidate = botResponse.candidates[0].content;
+          // console.log(firstCandidate);
           if (
             firstCandidate &&
             firstCandidate.parts &&
@@ -137,7 +150,10 @@ export const Chat = () => {
           ) {
             // パーツのテキストを連結してメッセージコンテンツを作成
             botMessageContent = firstCandidate.parts
-              .map((part: Part) => part.text)
+              .map((part: Part) => {
+                // console.log(part, part.text);
+                return part.text;
+              })
               .join('\n');
           }
         }
@@ -145,11 +161,12 @@ export const Chat = () => {
         // 生成されたボットのメッセージを作成
         const botMessage = {
           role: 'system',
-          content: botMessageContent,
+          content: botMessageContent, // パーツのテキストを連結したメッセージコンテンツをセット
         };
 
         // 会話履歴を更新（ユーザーとボットのメッセージを含む）
         setChatHistory([...updatedChatHistory, botMessage]);
+
         setLoading(false);
       }
     } catch (error) {
@@ -174,6 +191,7 @@ export const Chat = () => {
       <div className={chatHistoryStyle}>
         {loading ? <LoadingEl /> :
           <>
+            {/* chatHistory は user と system(gemini)の会話内容のオブジェクト・配列 */}
             {chatHistory.map((chat, index) => (
               <div
                 key={index}

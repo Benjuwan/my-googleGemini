@@ -11,6 +11,8 @@
 - `vite`では環境変数の呼び出しに`process.env`は使用できず、代わりに`import.meta.env`を使用する（参照情報：[vite issue](https://github.com/vitejs/vite/issues/1973)）
     - 使用例：
     ```
+    .
+    ..
     const response = await fetch(
         `https:/...?key=${import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY}`
     ..
