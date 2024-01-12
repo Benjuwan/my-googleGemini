@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini-tutorial-multiModal</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="importmap">
+        {
+          "imports": {
+            "@google/generative-ai": "https://esm.run/@google/generative-ai"
+          }
+        }
+      </script>
+  <script type="module" defer src="./gemini-multiModal.js"></script>
+</head>
+
+<body>
+  <section>
+    <form id="runForm">
+      <input type="text">
+      <button id="submitBtn">run</button>
+      <input type="file" accept="image/png, image/jpeg, image/jpg">
+      <div class="thubnail"></div>
+    </form>
+    <p class="geminiLoading">Gemini が解答を用意しています。</p>
+    <div class="answer"></div>
+  </section>
+</body>
+
+</html>

@@ -2,7 +2,6 @@ import { ChangeEvent, useState } from "react";
 import { css } from "@emotion/css";
 import ReactMarkdown from "react-markdown";
 import { LoadingEl } from "./LoadingEl";
-import { ImgFileUpload } from "./ImgFileUpload";
 
 type ChatMessage = {
   role: string;
@@ -97,9 +96,6 @@ export const Chat = () => {
   /* LoadingEl 用 */
   const [loading, setLoading] = useState<boolean>(false);
 
-  /* 画像 */
-  const [base64Images, setBase64Images] = useState<string>('');
-
   const sendMessage = async () => {
     const userMessage: ChatMessage =
     {
@@ -186,13 +182,9 @@ export const Chat = () => {
   const renderChatMessage = (message: ChatMessage) => {
     if (message.role === "system") {
       // マークダウン形式のメッセージをHTMLに変換して表示
-      if (message.content === 'string') {
-        return <ReactMarkdown>{message.content}</ReactMarkdown>;
-      }
+      return <ReactMarkdown>{message.content}</ReactMarkdown>;
     }
-    if (message.content === 'string') {
-      return <div>{message.content}</div>; // 通常のテキストメッセージ
-    }
+    return <div>{message.content}</div>; // 通常のテキストメッセージ
   };
 
   return (
@@ -229,7 +221,6 @@ export const Chat = () => {
             Send
           </button>
         </form>
-        <ImgFileUpload base64Images={base64Images} setBase64Images={setBase64Images} />
       </div>
     </div>
   );
