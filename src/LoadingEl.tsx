@@ -18,7 +18,7 @@ export const LoadingEl = memo(() => {
         }
     }, []);
 
-    return <LoadingElm className="isLoading">...Google Gemini がテキスト生成中</LoadingElm>
+    return <LoadingElm className="isLoading">...Google Gemini が回答を生成中</LoadingElm>
 });
 
 const LoadingElm = styled.p`
