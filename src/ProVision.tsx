@@ -72,7 +72,6 @@ export const ProVision = () => {
 
             setGeminiAnswer((_prevGeminiAnswer) => text);
             setInput((_prevInput) => '');
-            setFile((_prevFile) => null);
             setGeminiLoading(false);
         } else {
             setGeminiLoading(false);

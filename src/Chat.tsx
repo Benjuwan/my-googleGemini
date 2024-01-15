@@ -92,9 +92,13 @@ export const Chat = () => {
 
   /* user と system(gemini)の会話内容のオブジェクト・配列 State */
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-
+  
   /* LoadingEl 用 */
   const [loading, setLoading] = useState<boolean>(false);
+  
+  /* これまでの会話内容 */
+  const [chatShallowHistory, setChatShallowHistory] = useState<ChatMessage[]>([]);
+  const conversationUpdata = () => setChatShallowHistory((_prevChatShallowHistory) => [...chatShallowHistory, ...chatHistory]);
 
   const sendMessage = async () => {
     const userMessage: ChatMessage =
@@ -104,7 +108,8 @@ export const Chat = () => {
     };
 
     // 画面上の会話履歴を更新
-    const updatedChatHistory = [...chatHistory, userMessage];
+    // const updatedChatHistory = [...chatHistory, userMessage];
+    const updatedChatHistory = [userMessage]; // 上記と違って既存の会話内容は不要
 
     try {
       setLoading(true);
@@ -190,6 +195,22 @@ export const Chat = () => {
   return (
     <div className={chatContainerStyle}>
       <div className={chatHistoryStyle}>
+        {/* これまでの会話内容 */}
+        {chatShallowHistory.length > 0 &&
+          <>
+            {chatShallowHistory.map((chat, index) => (
+              <div
+                key={index}
+                className={
+                  chat.role === "user" ? userMessageStyle : botMessageStyle
+                }
+              >
+                {renderChatMessage(chat)}
+              </div>
+            ))}
+          </>
+        }
+        {/* gemini が生成する内容 */}
         {loading ? <LoadingEl /> :
           <>
             {/* chatHistory は user と system(gemini)の会話内容のオブジェクト・配列 */}
@@ -210,6 +231,7 @@ export const Chat = () => {
         <form className={formStyle} onSubmit={(formelm: ChangeEvent<HTMLFormElement>) => {
           formelm.preventDefault();
           sendMessage();
+          conversationUpdata();
         }}>
           <input
             type="text"
