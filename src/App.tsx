@@ -3,8 +3,6 @@ import { Chat } from "./Chat";
 import { ProVision } from "./ProVision";
 
 export const App = () => {
-  // console.log(import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY);
-
   const [selectApp, setSelectApp] = useState<string>('pro');
 
   return (

@@ -17,13 +17,12 @@ const chatContainerStyle = css`
   flex-direction: column;
   height: 100vh;
   background-color: #f5f5f5;
-`;
+  `;
 
 const chatHistoryStyle = css`
-  overflow-y: auto;
   flex-grow: 1;
   padding: 20px;
-  margin-bottom: 60px;
+  padding-bottom: calc(100vw/4);
 `;
 
 const userMessageStyle = css`
@@ -51,6 +50,7 @@ const inputStyle = css`
   border: 2px solid #dedede;
   border-radius: 4px;
   margin-right: 10px;
+  line-height: 1.6;
 `;
 
 const buttonStyle = css`
@@ -61,7 +61,14 @@ const buttonStyle = css`
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  &:hover {
+
+  &[disabled]{
+    cursor: default;
+    background-color: #dadada;
+    color: #333;
+  }
+
+  &:not([disabled]):hover {
     background-color: #3949ab;
   }
 `;
@@ -92,10 +99,10 @@ export const Chat = () => {
 
   /* user と system(gemini)の会話内容のオブジェクト・配列 State */
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  
+
   /* LoadingEl 用 */
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   /* これまでの会話内容 */
   const [chatShallowHistory, setChatShallowHistory] = useState<ChatMessage[]>([]);
   const conversationUpdata = () => setChatShallowHistory((_prevChatShallowHistory) => [...chatShallowHistory, ...chatHistory]);
@@ -192,6 +199,16 @@ export const Chat = () => {
     return <div>{message.content}</div>; // 通常のテキストメッセージ
   };
 
+  const keyDownGeminiRun = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // Shift + Enter キーを押下
+    if (event.shiftKey && event.key === 'Enter') {
+      if (input.length > 0) {
+        sendMessage();
+        conversationUpdata();
+      }
+    }
+  }
+
   return (
     <div className={chatContainerStyle}>
       <div className={chatHistoryStyle}>
@@ -228,18 +245,22 @@ export const Chat = () => {
         }
       </div>
       <div className={inputAreaStyle}>
-        <form className={formStyle} onSubmit={(formelm: ChangeEvent<HTMLFormElement>) => {
+        <form id="runForm" className={formStyle} onSubmit={(formelm: ChangeEvent<HTMLFormElement>) => {
           formelm.preventDefault();
-          sendMessage();
-          conversationUpdata();
+          {
+            input.length <= 0 &&
+              sendMessage(),
+              conversationUpdata()
+          }
         }}>
-          <input
-            type="text"
+          <p>プロンプト入力後に Shift + Enter キーまたは run ボタンを押下してください</p>
+          <textarea cols={30} rows={5}
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => keyDownGeminiRun(e)}
             className={inputStyle}
-          />
-          <button onClick={sendMessage} className={buttonStyle}>
+          ></textarea>
+          <button onClick={sendMessage} className={buttonStyle} disabled={input.length <= 0}>
             Send
           </button>
         </form>

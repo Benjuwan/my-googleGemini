@@ -105,18 +105,36 @@ export const ProVision = () => {
         });
     };
 
+    const keyDownGeminiRun = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        // Shift + Enter キーを押下
+        if (event.shiftKey && event.key === 'Enter') {
+            if (input.length > 0) run();
+        }
+    }
+
     return (
         <ProVisionSection>
             <form id="runForm" onSubmit={(formElm: ChangeEvent<HTMLFormElement>) => {
                 formElm.preventDefault();
                 if (input.length > 0) run();
             }}>
-                <input type="text" value={input} onInput={(inputElm: ChangeEvent<HTMLInputElement>) => setInput((_prevInputElm) => inputElm.target.value)} />
+                <p>プロンプト入力後に Shift + Enter キーまたは run ボタンを押下してください</p>
+                <textarea
+                    value={input}
+                    onInput={(inputElm: ChangeEvent<HTMLTextAreaElement>) => setInput((_prevInputElm) => inputElm.target.value)}
+                    onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => keyDownGeminiRun(e)}
+                    cols={30}
+                    rows={5}
+                ></textarea>
                 <button id="submitBtn" disabled={input.length <= 0}>run</button>
-                <input type="file" accept={`${[...fileAccept]}`} onChange={(fileElm: ChangeEvent<HTMLInputElement>) => {
-                    setFile(fileElm.target.files);
-                    uploadImgView(fileElm.currentTarget);
-                }} />
+                <input
+                    type="file"
+                    accept={`${[...fileAccept]}`}
+                    onChange={(fileElm: ChangeEvent<HTMLInputElement>) => {
+                        setFile(fileElm.target.files);
+                        uploadImgView(fileElm.currentTarget);
+                    }}
+                />
                 {input.length > 0 && <p>{input}</p>}
                 {base64ImageStr && <img src={base64ImageStr as string} />}
             </form>
@@ -144,12 +162,17 @@ margin: auto;
     background-color: #e9e9e9;
     border-radius: 8px;
     line-height: 2;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1em;
 
-    & input[type="text"] {
-        appearance: none;
-        border: 1px solid #333;
-        border-radius: 4px;
-        padding-left: .5em;
+    & p {
+        width: 100%;
+        margin: 0;
+    }
+
+    & textarea {
+        line-height: 1.6;
     }
 
     & button {
