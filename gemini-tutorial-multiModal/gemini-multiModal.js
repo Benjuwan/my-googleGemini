@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const formElm = document.querySelector('form#runForm'); // 包括する form 要素
 formElm.querySelector('#submitBtn').setAttribute('disabled', 'true');
 
-const inputElm = document.querySelector('input[type="text"]'); // プロンプト入力欄
+const inputElm = document.querySelector('textarea'); // プロンプト入力欄
 const fileElm = document.querySelector('input[type="file"]'); // プロンプト入力欄
 const thubnailElm = document.querySelector('.thubnail'); // 画像 の反映用
 const answerElm = document.querySelector('.answer'); // gemini の解答反映用
@@ -95,7 +95,13 @@ const uploadImgView = (files) => {
 /* ------------- 処理実行イベントハンドラ ------------- */
 formElm.addEventListener('submit', (e) => {
     e.preventDefault();
-    run(inputElm.value.length, inputElm.value);
+    // run(inputElm.value.length, inputElm.value);
+});
+
+inputElm.addEventListener('keydown', (e) => {
+    if (e.shiftKey && e.key === 'Enter') {
+        run(inputElm.value.length, inputElm.value);
+    }
 });
 
 fileElm.addEventListener('change', (e) => {
