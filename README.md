@@ -1,6 +1,5 @@
 # my-googleGemini
 `Google Gemini Pro`が試用期間の間に試した内容と備忘録です。<br />
-
 [Google AI Studio](https://makersuite.google.com/app/prompts/new_freeform)
 
 ## 概要
@@ -38,7 +37,7 @@
 ***
 
 ## 備忘録
-- `Vite`で環境変数を追加する場合は`VITE_ `を付けないと値の取得が不可
+- `Vite`で環境変数を追加する場合は`VITE_`を付けないと値の取得が不可
 - `React`で環境変数を追加する場合は先頭に`REACT_APP_`を付けないと値の取得が不可
 - `.env`ファイルは**プロジェクトのルートディレクトリに配置**する
     - `.env`ファイルは`.gitignore`に追加すること（`GitHub`にアップしてはいけない）

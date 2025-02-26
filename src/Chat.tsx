@@ -6,11 +6,11 @@ import { LoadingEl } from "./LoadingEl";
 type ChatMessage = {
   role: string;
   content: string;
-}
+};
 
 type Part = {
   text: string;
-}
+};
 
 const chatContainerStyle = css`
   display: flex;
@@ -105,7 +105,7 @@ export const Chat = () => {
 
   /* これまでの会話内容 */
   const [chatShallowHistory, setChatShallowHistory] = useState<ChatMessage[]>([]);
-  const conversationUpdata = () => setChatShallowHistory((_prevChatShallowHistory) => [...chatShallowHistory, ...chatHistory]);
+  const conversationUpdata = () => setChatShallowHistory([...chatShallowHistory, ...chatHistory]);
 
   const sendMessage = async () => {
     const userMessage: ChatMessage =
