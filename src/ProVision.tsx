@@ -15,7 +15,7 @@ export const ProVision = () => {
 
     const [geminiLoading, setGeminiLoading] = useState<boolean>(false); // ローディング
 
-    // Fetch your API_KEY
+    // Fetch your API_KEY（※ vite を使っている場合は .env ファイルで当該環境変数に VITE_ というプレフィックスを前置しないと機能しない）
     const API_KEY: string = import.meta.env.VITE_REACT_APP_GOOGLE_API_KEY;
 
     // Access your API key (see "Set up your API key" above)
@@ -53,7 +53,7 @@ export const ProVision = () => {
 
     const run = async () => {
         setGeminiLoading(true);
-        setGeminiAnswer((_prevGeminiAnswer) => '');
+        setGeminiAnswer('');
 
         if (file !== null && file.length > 0) {
             // For text-and-images input (multimodal), use the gemini-pro-vision model
@@ -70,22 +70,22 @@ export const ProVision = () => {
             const text = response.text();
             // console.log(text);
 
-            setGeminiAnswer((_prevGeminiAnswer) => text);
-            setInput((_prevInput) => '');
+            setGeminiAnswer(text);
+            setInput('');
             setGeminiLoading(false);
         } else {
             setGeminiLoading(false);
-            setInput((_prevInput) => '');
+            setInput('');
             alert('画像を投稿して下さい');
         }
     }
 
     const uploadImgView = (fileElm: HTMLInputElement) => {
-        setGeminiAnswer((_prevGeminiAnswer) => '');
+        setGeminiAnswer('');
         const files = fileElm.files as FileList;
 
         // 画像アップロードの取り消しを行った場合は画像を画面から削除
-        if (files.length === 0) setBase64ImageStr((_prevImageStr) => null);
+        if (files.length === 0) setBase64ImageStr(null);
 
         // FileList のままだと forEach が使えないので配列に変換する
         const fileArray = Array.from(files);
@@ -97,7 +97,7 @@ export const ProVision = () => {
             // ファイルの読み込みが完了したら画像の配列に加える
             reader.onloadend = () => {
                 const result = reader.result as string;
-                setBase64ImageStr((_prevImageStr) => result);
+                setBase64ImageStr(result);
             };
 
             // 画像ファイルを base64 形式で読み込む
@@ -121,7 +121,7 @@ export const ProVision = () => {
                 <p>プロンプト入力後に Shift + Enter キーまたは run ボタンを押下してください</p>
                 <textarea
                     value={input}
-                    onInput={(inputElm: ChangeEvent<HTMLTextAreaElement>) => setInput((_prevInputElm) => inputElm.target.value)}
+                    onInput={(inputElm: ChangeEvent<HTMLTextAreaElement>) => setInput(inputElm.target.value)}
                     onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => keyDownGeminiRun(e)}
                     cols={30}
                     rows={5}
